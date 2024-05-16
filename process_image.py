@@ -12,4 +12,4 @@ def draw_lines_on_image(image_path, polygons, output_path):
 
     # 결과 이미지 저장
     image.save(output_path)
-    print(f"이미지가 저장되었습니다: {output_path}")
+    print(f"success save image: {output_path}")

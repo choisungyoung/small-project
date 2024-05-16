@@ -24,13 +24,15 @@ def read_json_file(file_path):
 
 
 if __name__=="__main__":
-    # 예시 경로
-    directory_path = r"C:\\Users\\user\Desktop\\me\document\\회사\sp\\aihub\\validation\\TS_AP25_1024\\304.토지피복지도_항공위성_이미지_원천\\01-1.정식개방데이터\\Validation\\01.원천데이터\\VS_AP25_1024픽셀.zip"
+    # test
+    base_directory_path = r"data\304.토지피복지도_항공위성_이미지\01-1.정식개방데이터\Validation\\"
+    origin_path = base_directory_path + r"C\01.원천데이터\VS_AP25_1024픽셀\\"
+    labeling_json_path = base_directory_path + r"\02.라벨링데이터\VL_AP25_1024픽셀_AP25_1024픽셀_Json\\"
+    labeling_meta_path = base_directory_path + r"\02.라벨링데이터\VL_AP25_1024픽셀_AP25_1024픽셀_Meta\\"
 
     # 함수 호출
-    list_files_in_directory(directory_path)
-    
-    labeling_path = r"C:\\Users\\user\Desktop\\me\\document\\회사\\sp\\aihub\\validation\\TS_AP25_1024\\304.토지피복지도_항공위성_이미지_라벨링_JSON\\01-1.정식개방데이터\\Validation\\02.라벨링데이터\\VL_AP25_1024픽셀_AP25_1024픽셀_Json.zip"
-    json = read_json_file(labeling_path + "\\" + "LC_GG_AP25_36701005_001_2021_1024.json")
+    list_files_in_directory(origin_path)
+
+    json = read_json_file(labeling_json_path + "\\" + "LC_GG_AP25_36701005_001_2021_1024.json")
 
     print(json["features"][0]["geometry"]["coordinates"])

@@ -13,3 +13,7 @@ def draw_lines_on_image(image_path, polygons, output_path):
     # 결과 이미지 저장
     image.save(output_path)
     print(f"success save image: {output_path}")
+
+def get_image_width_height(image_path):
+    image = Image.open(image_path)
+    return (image.width, image.height)

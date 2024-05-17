@@ -1,5 +1,6 @@
 import os
 import json
+import shutil
 
 def list_files_in_directory(directory_path):
     try:
@@ -22,6 +23,13 @@ def read_json_file(file_path):
         print(f"Error: {e}")
         return None
 
+def save_list_file(file_path, text):
+    file = open(file_path, "w")
+    file.write(text)
+    file.close()
+
+def copy_file(from_path, to_path):
+    shutil.copyfile(from_path, to_path)
 
 if __name__=="__main__":
     # test

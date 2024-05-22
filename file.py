@@ -14,9 +14,9 @@ def list_files_in_directory(directory_path):
     except Exception as e:
         print(f"Error: {e}")
 
-def read_json_file(file_path):
+def read_json_file(file_path, encoding):
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, 'r', encoding=encoding) as file:
             data = json.load(file)
         return data
     except Exception as e:

@@ -3,17 +3,19 @@ import file
 import process_image
 import sys
 
-base_directory_path = r"data\304.토지피복지도_항공위성_이미지\01-1.정식개방데이터\Validation\\"
+base_directory_path = r"data\토지 피복지도 항공위성 이미지(수도권)\Training\\"
 
-origin_path = base_directory_path + r"\01.원천데이터\VS_AP25_1024픽셀\\"
-labeling_json_path = base_directory_path + r"\02.라벨링데이터\VL_AP25_1024픽셀_AP25_1024픽셀_Json\\"
-labeling_meta_path = base_directory_path + r"\02.라벨링데이터\VL_AP25_1024픽셀_AP25_1024픽셀_Meta\\"
+origin_path = base_directory_path + r"[원천]1.항공사진_Fine_512픽셀\\"
+labeling_json_path = base_directory_path + r"[라벨]항공_512_2.Ground_Truth_JSON_전체\\"
+labeling_meta_path = base_directory_path + r"[라벨]항공_512_4.메타데이터\\"
 
 output_path = "output\\"
 
 yolo_labeling_file_path = r"data\yolo\train\labels\\"
 yolo_origin_file_path = r"data\yolo\train\images\\"
 filename_list = file.list_files_in_directory(origin_path)
+
+map = {"10":"0","20":"1","30":"2","40":"3","50":"4","60":"5","70":"6","80":"7","90":"8","100":"9"}
 
 total = len(filename_list)
 success_count = 0
@@ -23,8 +25,8 @@ for filename in filename_list:
     try:    
         origin_file_path_name = origin_path + filename + ".tif"
         output_file_path_name = output_path + filename + "_labeling.tif"
-        json = file.read_json_file(labeling_json_path + filename + ".json")
-        meta = file.read_json_file(labeling_meta_path + filename + "_META.json")
+        json = file.read_json_file(labeling_json_path + filename + "_FGT.json", "utf-8")
+        meta = file.read_json_file(labeling_meta_path + filename + "_META.json", "euc-kr")
 
         yolo_labeling_file_path_name = yolo_labeling_file_path + filename + ".txt"
         yolo_origin_file_path_name = yolo_origin_file_path + filename + ".tif"
@@ -40,6 +42,9 @@ for filename in filename_list:
         for feature in json["features"]:
             ANN_NM = feature["properties"]["ANN_NM"]
             ANN_CD = feature["properties"]["ANN_CD"]
+            
+            if ANN_CD != 10 and ANN_CD != 20:
+                continue
 
             pixel_list = []
             min_width = sys.maxsize
@@ -76,7 +81,7 @@ for filename in filename_list:
             center_y_ratio = center_y / image_size[1]
             object_width_ratio = object_width / image_size[0]
             object_height_ratio = object_height / image_size[1]
-            yolo_label +=  str(ANN_CD) + " " + str(center_x_ratio) + " " + str(center_y_ratio) + " " + str(object_width_ratio) + " " + str(object_height_ratio) + "\n"
+            yolo_label +=  map[str(ANN_CD)] + " " + str(center_x_ratio) + " " + str(center_y_ratio) + " " + str(object_width_ratio) + " " + str(object_height_ratio) + "\n"
             
             # print(">>> " + yolo_label)
 
@@ -92,10 +97,13 @@ for filename in filename_list:
         process_image.draw_lines_on_image(origin_file_path_name, polygon_list, output_file_path_name)
 
         success_count += 1
+
+        if success_count > 100:
+            break
     except Exception as e:
         print(f"error : {e}")
         fail_count += 1
 
-    break
+    # break
 
 print(f"complete (total: {total}, success: {success_count}, fail:{fail_count})")

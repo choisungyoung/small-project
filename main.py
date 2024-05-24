@@ -3,17 +3,30 @@ import file
 import process_image
 import sys
 
-base_directory_path = r"data\토지 피복지도 항공위성 이미지(수도권)\Training\\"
+### Validation
+base_directory_path = r"data\079.토지_피복지도_항공위성_이미지_데이터(수도권)\01.데이터\2.Validation\\"
 
-origin_path = base_directory_path + r"[원천]1.항공사진_Fine_512픽셀\\"
-labeling_json_path = base_directory_path + r"[라벨]항공_512_2.Ground_Truth_JSON_전체\\"
-labeling_meta_path = base_directory_path + r"[라벨]항공_512_4.메타데이터\\"
+origin_path = base_directory_path + r"2.원천데이터\1.항공사진_Fine_512픽셀\\"
+labeling_json_path = base_directory_path + r"1.라벨링데이터\1.항공사진_Fine_512픽셀\2.Ground_Truth_JSON_전체\\"
+labeling_meta_path = base_directory_path + r"1.라벨링데이터\1.항공사진_Fine_512픽셀\4.메타데이터\\"
 
-output_path = "output\\"
+yolo_labeling_file_path = r"data\yolo\valid\labels\\"
+yolo_origin_file_path = r"data\yolo\valid\images\\"
 
-yolo_labeling_file_path = r"data\yolo\train\labels\\"
-yolo_origin_file_path = r"data\yolo\train\images\\"
+
+### Train
+# base_directory_path = r"data\079.토지_피복지도_항공위성_이미지_데이터(수도권)\01.데이터\1.Training\\"
+
+# origin_path = base_directory_path + r"2.원천데이터\1.항공사진_Fine_512픽셀\\"
+# labeling_json_path = base_directory_path + r"1.라벨링데이터\1.항공사진_Fine_512픽셀\2.Ground_Truth_JSON_전체\\"
+# labeling_meta_path = base_directory_path + r"1.라벨링데이터\1.항공사진_Fine_512픽셀\4.메타데이터\\"
+
+# yolo_labeling_file_path = r"data\yolo\train\labels\\"
+# yolo_origin_file_path = r"data\yolo\train\images\\"
+
+
 filename_list = file.list_files_in_directory(origin_path)
+output_path = "output\\"
 
 map = {"10":"0","20":"1","30":"2","40":"3","50":"4","60":"5","70":"6","80":"7","90":"8","100":"9"}
 
@@ -88,7 +101,7 @@ for filename in filename_list:
             # break
 
         # 라벨링 데이터 저장 (yolo)
-        print(yolo_label)
+        # print(yolo_label)
         file.save_list_file(yolo_labeling_file_path_name, yolo_label)
 
         # 원천 이미지 yolo 디렉토리로 복사
@@ -98,8 +111,8 @@ for filename in filename_list:
 
         success_count += 1
 
-        if success_count > 100:
-            break
+        # if success_count >= 20:
+        #     break
     except Exception as e:
         print(f"error : {e}")
         fail_count += 1
